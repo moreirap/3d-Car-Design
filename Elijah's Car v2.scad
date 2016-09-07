@@ -17,26 +17,16 @@ echo("Zscale = ",Zscale);
 
 module body()
 {
-    union() {
-        //intersection(){	
-            //linear_extrude (height=Body_width)
-            //import(file = "side.dxf");
-            
-            union() {
-                rotate([0,90,0])translate([-Body_width,0,0])
-                linear_extrude (height=Body_length)
-                import(file = "front.dxf");                
-                
-                translate([-Body_width,0,0])
-                cube(10);
-                
-                #rotate([0,90,0])
-                translate([-Body_width,20,-10])
-                scale([.25,.25,1])
-                linear_extrude (height=Body_length+20)
-                import(file = "logojaguar.dxf");
-            }
-       // }
+    difference() 
+    {
+        intersection() {
+            linear_extrude (height=Body_width)
+            import(file = "side.dxf");
+        
+            rotate([0,90,0])translate([-Body_width,0,0])
+            linear_extrude (height=Body_length)
+            import(file = "front.dxf");
+        }
     }
 }
 
@@ -44,43 +34,42 @@ module car()
 {
     union() {
         difference(){
+            // Add main car body
             body();
-            //Hollow body out
+           
+            // Remove interior to make it hollow
             translate([Body_thickness/Scale,0,Body_thickness/Scale]) 
             scale([Xscale,Yscale,Zscale])body();
-            //add windows and wheel wells
+            //add windows
             linear_extrude (height=50) import(file = "side_windows.dxf");
-            rotate([0,90,0])translate([50,0,0])cylinder(h=24,r= 1,$fn=100);
-            translate([12,24,-8])rotate([0,0,0])cylinder(h=60,r= 3.5,$fn=100);
-            translate([85,24,-8])rotate([0,0,0])cylinder(h=60,r= 3.5,$fn=100);       
-        }
-        color("red") {
-            rotate([-10,-90,0])
-            translate([-1,15,-1]) 
-            scale([.25,.25,.1])
-            import(file = "logojaguar.stl");
+          
+            // Add logo
+            rotate([0,270,0])
+            translate([0,15.6,-7])
+            scale([.25,.15,.2])
+            linear_extrude (height=Body_length+20)
+            import(file = "logojaguar.dxf");
         }
     }
 }
-body();
 
-//translate([-7,-14,-5])rotate([90,0,90])scale([Scale,Scale,Scale])car();
+translate([-7,-14,-5])rotate([90,0,90])scale([Scale,Scale,Scale])car();
 
 
 // Draw main body of the car
 
 
 // Draw the 2 wheel holders
-//DrawHolder(-10.2);
-//DrawHolder(13.2);
-//
-//// Draw 4 wheels
-//// left
-//DrawWheel(11,-10,1);
-//DrawWheel(11,13.2,1);
-////right
-//DrawWheel(-8.7,-10,-1);
-//DrawWheel(-8.7,13.2,-1);
+DrawHolder(-10.2);
+DrawHolder(13.2);
+
+// Draw 4 wheels
+// left
+DrawWheel(11,-10,1);
+DrawWheel(11,13.2,1);
+//right
+DrawWheel(-8.7,-10,-1);
+DrawWheel(-8.7,13.2,-1);
 
 
 // Modules
