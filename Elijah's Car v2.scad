@@ -11,15 +11,33 @@ Xscale = (Body_length-2*Body_thickness/Scale)/100;		        //Car wall thickness
 Yscale = (Body_length-Body_thickness/Scale)/100;
 Zscale = (Body_length-4*Body_thickness/Scale)/100;
 
+echo("Xscale = ",Xscale);
+echo("Yscale = ",Yscale);
+echo("Zscale = ",Zscale);
+
 module body()
 {
-	intersection(){	
-		linear_extrude (height=Body_width)
-		import(file = "side.dxf");
-
-		rotate([0,90,0])translate([-Body_width,0,0])linear_extrude (height=Body_length)
-		import(file = "front.dxf");
-	}
+    union() {
+        //intersection(){	
+            //linear_extrude (height=Body_width)
+            //import(file = "side.dxf");
+            
+            union() {
+                rotate([0,90,0])translate([-Body_width,0,0])
+                linear_extrude (height=Body_length)
+                import(file = "front.dxf");                
+                
+                translate([-Body_width,0,0])
+                cube(10);
+                
+                #rotate([0,90,0])
+                translate([-Body_width,20,-10])
+                scale([.25,.25,1])
+                linear_extrude (height=Body_length+20)
+                import(file = "logojaguar.dxf");
+            }
+       // }
+    }
 }
 
 module car()
@@ -36,31 +54,33 @@ module car()
             translate([12,24,-8])rotate([0,0,0])cylinder(h=60,r= 3.5,$fn=100);
             translate([85,24,-8])rotate([0,0,0])cylinder(h=60,r= 3.5,$fn=100);       
         }
-        translate([0,10,25]) 
-        rotate([0,-90,0])
-//        scale([0.1,0.05,0.01])
-//        surface(file = "jaguar.png", center = true, invert = true);
-        linear_extrude (height=Body_length)
-		import(file = "grelha.dxf");
+        color("red") {
+            rotate([-10,-90,0])
+            translate([-1,15,-1]) 
+            scale([.25,.25,.1])
+            import(file = "logojaguar.stl");
+        }
     }
 }
-translate([-7,-14,-5])rotate([90,0,90])scale([Scale,Scale,Scale])car();
+body();
+
+//translate([-7,-14,-5])rotate([90,0,90])scale([Scale,Scale,Scale])car();
 
 
 // Draw main body of the car
 
 
 // Draw the 2 wheel holders
-DrawHolder(-10.2);
-DrawHolder(13.2);
-
-// Draw 4 wheels
-// left
-DrawWheel(11,-10,1);
-DrawWheel(11,13.2,1);
-//right
-DrawWheel(-8.7,-10,-1);
-DrawWheel(-8.7,13.2,-1);
+//DrawHolder(-10.2);
+//DrawHolder(13.2);
+//
+//// Draw 4 wheels
+//// left
+//DrawWheel(11,-10,1);
+//DrawWheel(11,13.2,1);
+////right
+//DrawWheel(-8.7,-10,-1);
+//DrawWheel(-8.7,13.2,-1);
 
 
 // Modules

@@ -47,7 +47,7 @@ module jaguar2()
 {
  /* all layers combined, scaled to within a 1mm cube */
 // scale([1, 1, 1/1])
- scale([100, 50, 1/1])
+ scale([10, 5, 1/1])
  difference() {
   union() {
    scale([1,1,2]) translate([0,0,-0.5]) jaguar2_1();
